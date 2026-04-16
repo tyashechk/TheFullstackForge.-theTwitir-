@@ -1,0 +1,30 @@
+@import "@styles/main";
+
+.users-page {
+    padding: $spacing-xl 0;
+
+    h1 {
+        color: $primary-color;
+        margin-bottom: $spacing-md;
+    }
+
+    .btn-subscribe {
+        background-color: grey;
+        border: 1px solid black;
+        margin: 5px;
+        padding: 5px;
+        border-radius: 10px;
+        color: $background-default;
+        cursor: pointer;
+    }
+
+    .btn-unsubscribe {
+        background-color: darkred;
+        border: 1px solid black;
+        margin: 5px;
+        padding: 5px;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+    }
+}
