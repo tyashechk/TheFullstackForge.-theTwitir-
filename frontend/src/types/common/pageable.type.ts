@@ -1,15 +1,19 @@
-export type ApiResponse < T > = {
-    data: T;
-    status: number;
-    message?: string;
-}
-
-export type Pageable = {
+export interface Pageable {
     page: number;
     size: number;
     sort?: string[];
 }
 
-export const getDefaultPageable = (): Pageable => {
-    return { page: 0, size: 100, sort: ["id"] }
+export const getDefaultPageable = (): Pageable => ({
+    page: 0,
+    size: 10,
+    sort: ['id']
+});
+
+export interface Page<T> {
+    content: T[];
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
 }

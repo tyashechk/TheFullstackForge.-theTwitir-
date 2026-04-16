@@ -26,7 +26,8 @@ export const userController = {
 
     getSubscriptions: (pageable: Pageable) => {
         const token = localStorage.getItem('token');
-        return api.get(`/subscriptions/?page=${pageable.page}&size=${pageable.size}`, {
+        console.log('🟢 getSubscriptions вызван с pageable:', pageable);
+        return api.get(`/subscriptions?page=${pageable.page}&size=${pageable.size}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
     },
@@ -40,7 +41,7 @@ export const userController = {
 
     unsubscribe: (userId: number) => {
         const token = localStorage.getItem('token');
-        return api.post(`/subscriptions/unsubscribe/${userId}`, {}, {
+        return api.delete(`/subscriptions/unsubscribe/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
     },

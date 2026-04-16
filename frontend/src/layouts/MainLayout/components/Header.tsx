@@ -3,9 +3,9 @@ import './Header.scss';
 
 const Header = () => {
     const navItems = [
-        { path: '/users', label: 'Пользователи' },   // ← первым
-        { path: '/', label: 'Главная' },             // ← вторым
-        { path: '/about', label: 'О проекте' },      // ← третьим
+        { path: '/users', label: 'Пользователи' },
+        { path: '/', label: 'Главная' },
+        { path: '/about', label: 'О проекте' },
     ];
 
     return <header className="header">
@@ -14,7 +14,6 @@ const Header = () => {
                 <Link to="/" className="logo">
                     React Template
                 </Link>
-
                 <nav className="nav">
                     {navItems.map((item) => (
                         <NavLink

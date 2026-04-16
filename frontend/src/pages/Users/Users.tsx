@@ -9,11 +9,19 @@ const Users = () => {
     const [error, setError] = useState('');
     
     const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+    const [subscribedIds, setSubscribedIds] = useState<Set<number>>(new Set());
 
+    // Загрузка текущего пользователя и сохранённых подписок
     useEffect(() => {
         const userId = localStorage.getItem('userId');
         if (userId) {
             setCurrentUserId(parseInt(userId));
+        }
+        
+        // Загружаем подписки из localStorage
+        const saved = localStorage.getItem('subscribedIds');
+        if (saved) {
+            setSubscribedIds(new Set(JSON.parse(saved)));
         }
     }, []);
 
@@ -37,11 +45,27 @@ const Users = () => {
     const handleSubscribe = async (userId: number, username: string) => {
         try {
             await userController.subscribe(userId);
+            const newIds = new Set(subscribedIds).add(userId);
+            setSubscribedIds(newIds);
+            localStorage.setItem('subscribedIds', JSON.stringify([...newIds]));
             console.log(`✅ Подписались на ${username}`);
-            alert(`Вы подписались на ${username}`);
         } catch (error) {
             console.error(`❌ Ошибка подписки:`, error);
             alert(`Не удалось подписаться на ${username}`);
+        }
+    };
+
+    const handleUnsubscribe = async (userId: number, username: string) => {
+        try {
+            await userController.unsubscribe(userId);
+            const newIds = new Set(subscribedIds);
+            newIds.delete(userId);
+            setSubscribedIds(newIds);
+            localStorage.setItem('subscribedIds', JSON.stringify([...newIds]));
+            console.log(`✅ Отписались от ${username}`);
+        } catch (error) {
+            console.error(`❌ Ошибка отписки:`, error);
+            alert(`Не удалось отписаться от ${username}`);
         }
     };
 
@@ -66,14 +90,22 @@ const Users = () => {
                                     );
                                 }
                                 
+                                const isSubscribed = subscribedIds.has(user.id);
+                                
                                 return (
                                     <li key={user.id}>
                                         {user.username}
                                         <button
-                                            className='btn-subscribe'
-                                            onClick={() => handleSubscribe(user.id, user.username)}
+                                            className={isSubscribed ? 'btn-unsubscribe' : 'btn-subscribe'}
+                                            onClick={() => {
+                                                if (isSubscribed) {
+                                                    handleUnsubscribe(user.id, user.username);
+                                                } else {
+                                                    handleSubscribe(user.id, user.username);
+                                                }
+                                            }}
                                         >
-                                            Подписаться
+                                            {isSubscribed ? 'Отписаться' : 'Подписаться'}
                                         </button>
                                     </li>
                                 );
