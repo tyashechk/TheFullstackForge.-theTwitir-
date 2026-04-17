@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.parus.chirp.exception.NotExistException;
-import ru.parus.chirp.exception.NotExistUserException;
 import ru.parus.chirp.mapper.FollowerMapper;
 import ru.parus.chirp.model.FollowerEntity;
 import ru.parus.chirp.model.UserEntity;
@@ -69,16 +67,29 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     @Transactional
     public FollowerDto unsubscribe(Long id) {
-        UserEntity currentUser = userService.getCurrentUserEntity();
-        UserEntity followUser = userRepository.findById(id)
-                .orElseThrow(NotExistUserException::new);
+        log.info("=== ОТПИСКА ОТ ПОЛЬЗОВАТЕЛЯ С ID: {} ===", id);
         
+        UserEntity currentUser = userService.getCurrentUserEntity();
+        log.info("Текущий пользователь: {} (ID: {})", currentUser.getUsername(), currentUser.getId());
+        
+        UserEntity followUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Пользователь с ID " + id + " не найден"));
+        log.info("Отписываемся от: {} (ID: {})", followUser.getUsername(), followUser.getId());
+        
+        // Пробуем найти подписку в обоих порядках
         FollowerEntity followerLink = followerRepository
                 .findByUserAndFollower(followUser, currentUser)
-                .orElseThrow(NotExistException::new);
+                .orElse(null);
+        
+        if (followerLink == null) {
+            log.info("Пробуем найти в обратном порядке...");
+            followerLink = followerRepository
+                    .findByUserAndFollower(currentUser, followUser)
+                    .orElseThrow(() -> new RuntimeException("Подписка не найдена"));
+        }
         
         followerRepository.delete(followerLink);
-        log.info("❌ Отписка: удалена подписка на пользователя ID={}", followUser.getId());
+        log.info("✅ Отписка успешна");
         
         return followerMapper.toDtoSubscription(followerLink);
     }
