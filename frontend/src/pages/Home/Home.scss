@@ -7,6 +7,82 @@
         color: $primary-color;
         margin-bottom: $spacing-md;
     }
+
+    input {
+        min-width: 260px;
+        padding: $spacing-sm $spacing-md;
+        border: 1px solid $text-disabled;
+        border-radius: 6px;
+    }
+
+    button {
+        padding: $spacing-sm $spacing-md;
+        border: 1px solid $primary-color;
+        border-radius: 6px;
+        background: $background-paper;
+        color: $primary-color;
+        cursor: pointer;
+
+        &:disabled {
+            border-color: $text-disabled;
+            color: $text-disabled;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.home-page__error {
+    color: $error-color;
+    margin-bottom: $spacing-md;
+}
+
+.home-page__search,
+.home-page__create,
+.home-page__pagination {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+}
+
+.home-page__active-tag {
+    margin-bottom: $spacing-md;
+    color: $text-secondary;
+}
+
+.home-page__post-editor {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+}
+
+.home-page__posts {
+    display: grid;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+}
+
+.home-page__posts li {
+    padding: $spacing-md;
+    border: 1px solid $text-disabled;
+    border-radius: 6px;
+    background: $background-paper;
+}
+
+.home-page__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    margin-top: $spacing-sm;
+
+    button {
+        padding: $spacing-xs $spacing-sm;
+        border-color: $info-color;
+        color: $info-color;
+        font-size: $font-size-sm;
+    }
 }
 
 .btn-post-edit {

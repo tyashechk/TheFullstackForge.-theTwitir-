@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.parus.chirp.model.dto.post.PostDto;
 import ru.parus.chirp.service.PostService;
@@ -57,6 +58,16 @@ public class PostController {
     })
     public ResponseEntity<Page<PostDto>> index(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(postService.index(pageable));
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "ÐŸÐ¾Ð¸ÑÐº Ð¿Ð¾ÑÑ‚Ð¾Ð² Ð¿Ð¾ Ñ‚ÐµÐ³Ñƒ",
+            description = "Ð˜Ñ‰ÐµÑ‚ Ð¿Ð¾ÑÑ‚Ñ‹ Ð¿Ð¾ Ñ…ÑÑˆÑ‚ÐµÐ³Ñƒ Ñ Ð¿Ð¾ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ‡Ð½Ð¾Ð¹ Ð½Ð°Ð²Ð¸Ð³Ð°Ñ†Ð¸ÐµÐ¹")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ð£ÑÐ¿ÐµÑˆÐ½Ñ‹Ð¹ Ð¾Ñ‚Ð²ÐµÑ‚"),
+    })
+    public ResponseEntity<Page<PostDto>> searchByTag(@RequestParam String tag, @PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(postService.searchByTag(tag, pageable));
     }
 
     @GetMapping("/{id}")

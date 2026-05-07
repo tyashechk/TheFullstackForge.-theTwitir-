@@ -1,3 +1,6 @@
 export type PostDto = {
-    content: string
+    id?: number;
+    content: string;
+    userId?: number;
+    tags?: string[];
 }

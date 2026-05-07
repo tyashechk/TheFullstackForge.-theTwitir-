@@ -5,7 +5,12 @@ import { PageableObject } from "@/types/page/page.types";
 
 export const postsController = {
     getPosts: (pageable: Pageable) => {
-        return api.get<PageableObject>(`/posts/?page=${pageable.page}&size=${pageable.size}&sort=${pageable.sort?.join(",")}`);
+        return api.get<PageableObject<PostDto>>(`/posts/?page=${pageable.page}&size=${pageable.size}&sort=${pageable.sort?.join(",")}`);
+    },
+
+    searchByTag: (tag: string, pageable: Pageable) => {
+        const normalizedTag = tag.replace(/^#/, '').trim();
+        return api.get<PageableObject<PostDto>>(`/posts/search?tag=${encodeURIComponent(normalizedTag)}&page=${pageable.page}&size=${pageable.size}&sort=${pageable.sort?.join(",")}`);
     },
 
     getPostId: (id: number) => {
@@ -17,6 +22,6 @@ export const postsController = {
     },
 
     createPost: (data: PostDto) => {
-        return api.post<PageableObject>(`/posts/`, data);
+        return api.post<PostDto>(`/posts/`, data);
     }
 }

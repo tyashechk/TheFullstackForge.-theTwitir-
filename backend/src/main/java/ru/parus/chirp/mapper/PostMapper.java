@@ -21,10 +21,17 @@ import ru.parus.chirp.model.dto.post.PostDto;
 public interface PostMapper {
 
     @Mapping(target = "userId", source = "owner.id")
+    @Mapping(target = "tags", expression = "java(entity.getTags() == null ? java.util.List.of() : entity.getTags().stream().map(ru.parus.chirp.model.TagEntity::getName).sorted().toList())")
     PostDto toDto(PostEntity entity);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "owner", ignore = true)
+    @Mapping(target = "tags", ignore = true)
     PostEntity toEntity(PostDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "owner", ignore = true)
+    @Mapping(target = "tags", ignore = true)
     void patchUpdate(PostDto dto, @MappingTarget PostEntity entity);
 }

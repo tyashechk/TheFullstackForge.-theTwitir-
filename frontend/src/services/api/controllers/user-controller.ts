@@ -1,48 +1,30 @@
 import { api } from "..";
 import { UserDto } from "@/types/user/user.type";
 import { Pageable } from "@/types/common/pageable.type";
+import { PageableObject } from "@/types/page/page.types";
 
 export const userController = {
     getUsers: (pageable: Pageable) => {
-        const token = localStorage.getItem('token');
-        return api.get(`/users?page=${pageable.page}&size=${pageable.size}&sort=${pageable.sort?.join(",")}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        return api.get<PageableObject<UserDto>>(`/users?page=${pageable.page}&size=${pageable.size}&sort=${pageable.sort?.join(",")}`);
     },
 
     getUserById: (id: number) => {
-        const token = localStorage.getItem('token');
-        return api.get<UserDto>(`/users/${id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        return api.get<UserDto>(`/users/${id}`);
     },
 
     getCurrentUser: () => {
-        const token = localStorage.getItem('token');
-        return api.get<UserDto>(`/users/me`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        return api.get<UserDto>(`/users/me`);
     },
 
     getSubscriptions: (pageable: Pageable) => {
-        const token = localStorage.getItem('token');
-        console.log('🟢 getSubscriptions вызван с pageable:', pageable);
-        return api.get(`/subscriptions?page=${pageable.page}&size=${pageable.size}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        return api.get(`/subscriptions?page=${pageable.page}&size=${pageable.size}`);
     },
 
     subscribe: (userId: number) => {
-        const token = localStorage.getItem('token');
-        return api.post(`/subscriptions/subscribe/${userId}`, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        return api.post(`/subscriptions/subscribe/${userId}`, {});
     },
 
     unsubscribe: (userId: number) => {
-        const token = localStorage.getItem('token');
-        return api.delete(`/subscriptions/unsubscribe/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        return api.delete(`/subscriptions/unsubscribe/${userId}`);
     },
 };

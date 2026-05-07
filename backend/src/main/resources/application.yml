@@ -30,6 +30,7 @@ spring:
     user: ${JDBC_USER:fs_admin}
     password: ${JDBC_PASSWORD:admin123}
     enabled: true
+    validate-on-migrate: false
     default-schema: public
 
 springdoc:
