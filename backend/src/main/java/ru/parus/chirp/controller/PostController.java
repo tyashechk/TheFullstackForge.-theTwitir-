@@ -66,8 +66,9 @@ public class PostController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ð£ÑÐ¿ÐµÑˆÐ½Ñ‹Ð¹ Ð¾Ñ‚Ð²ÐµÑ‚"),
     })
-    public ResponseEntity<Page<PostDto>> searchByTag(@RequestParam String tag, @PageableDefault Pageable pageable) {
+    public ResponseEntity<Page<PostDto>> searchByTag(@RequestParam(required = false) String tag, @PageableDefault Pageable pageable) {
         return ResponseEntity.ok(postService.searchByTag(tag, pageable));
+
     }
 
     @GetMapping("/{id}")
